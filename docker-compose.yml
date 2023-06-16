@@ -27,33 +27,29 @@ services:
         ports:
             - ${DOCKER_PHP_PORT}:9000
 
-    postgres:
-        image: postgres:14
-        container_name: ${DOCKER_PROJECT_NAME}_postgres
-        restart: always
-        environment:
-            POSTGRES_DB: ${DOCKER_PROJECT_NAME}
-            POSTGRES_USER: postgres
-            POSTGRES_PASSWORD: postgres
-        volumes:
-            - postgres:/var/lib/${DOCKER_PROJECT_NAME}_postgres
-        ports:
-            - ${DOCKER_POSTGRES_PORT}:5432
-
     redis:
         image: redis:alpine
         container_name: ${DOCKER_PROJECT_NAME}_redis
         restart: always
-        command: redis-server
+        command: redis-server --port ${DOCKER_REDIS_PORT}
         volumes:
             - redis:/var/lib/${DOCKER_PROJECT_NAME}_redis
         ports:
             - ${DOCKER_REDIS_PORT}:6379
 
+    redisinsight:
+        image: redislabs/redisinsight
+        container_name: ${DOCKER_PROJECT_NAME}_redisinsight
+        restart: always
+        volumes:
+            - redisinsight:/var/lib/${DOCKER_PROJECT_NAME}_redisinsight
+        ports:
+            - ${DOCKER_REDISINSIGHT_PORT}:8001
+
 volumes:
-    postgres:
-        external:
-            name: ${DOCKER_PROJECT_NAME}_postgres
     redis:
         external:
             name: ${DOCKER_PROJECT_NAME}_redis
+    redisinsight:
+        external:
+            name: ${DOCKER_PROJECT_NAME}_redisinsight
