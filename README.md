@@ -3,6 +3,8 @@
 ## TO DO:
 
 ### docker-compose up -d --build
+### npm i
+### npm run dev
 ### docker exec -it nidge_php bash
 ### composer i
 ### php artisan init

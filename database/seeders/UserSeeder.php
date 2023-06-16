@@ -20,13 +20,12 @@ class UserSeeder extends Seeder
                 'id' => $i,
                 'name' => $faker->name,
                 'email' => $faker->unique()->safeEmail,
-                'password' => $faker->password,
                 'rank' => rand(0, 100),
+                'created_at' => now(),
             ];
 
-            Redis::hmset('user:' . $user['id'], $user);
+            Redis::hset('user:' . $user['id'], 'data', json_encode($user));
         }
-
     }
 
 }

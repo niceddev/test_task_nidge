@@ -2,76 +2,61 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Http\Requests\UserRequest;
+use App\Repositories\UserRepository;
+use App\Services\RedisService;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Redis;
 
 class UserController extends Controller
 {
-    public function index()
+    public function index(RedisService $redisService)
     {
-        $users = Redis::hgetall('users');
-        $users = array_map(function ($user) {
-            return json_decode($user, true);
-        }, $users);
+        $userIds = $redisService->getAllUserIds(Redis::keys('*'));
+        $sortedUsersData = collect(
+            array_map(fn($id) => (object)json_decode(Redis::hgetall('user:' . $id)['data'] ?? null, true), $userIds)
+        )->sortByDesc('created_at')->values()->all();
 
-        return view('users.index', compact('users'));
+        $page = request()->input('page', 0);
+        $perPage = 25;
+
+        $users = new LengthAwarePaginator(
+            array_slice($sortedUsersData, ($page * $perPage) - $perPage, $perPage, true),
+            count($sortedUsersData),
+            $perPage,
+            $page,
+            ['path' => request()->url()]
+        );
+
+        return view('modules.users.index', compact('users'));
     }
 
     public function create()
     {
-        return view('users.create');
+        return view('modules.users.create');
     }
 
-    public function store(Request $request)
+    public function store(UserRepository $userRepository, UserRequest $userRequest)
     {
-        $user = $request->validate([
-            'name' => 'required',
-            'email' => 'required|email|unique:users,email',
-            // Add validation for other fields
-        ]);
-
-        $user['id'] = uniqid(); // Generate a unique ID for the user
-
-        Redis::hset('users', $user['id'], json_encode($user));
-
-        return redirect()->route('users.index')->with('success', 'User created successfully.');
+        $userRepository->createOrUpdateKey($userRequest->validated());
+        return redirect()->route('users.index', ['page' => 1])->with('success', __('Успешно создан!'));
     }
 
-    public function show($id)
+    public function edit(int $userId)
     {
-        $user = Redis::hget('users', $id);
-        $user = json_decode($user, true);
-
-        return view('users.show', compact('user'));
+        $user = (object)json_decode(Redis::hgetall('user:' . $userId)['data'], true);
+        return view('modules.users.edit', compact('user'));
     }
 
-    public function edit($id)
+    public function update(UserRepository $userRepository, UserRequest $userRequest)
     {
-        $user = Redis::hget('users', $id);
-        $user = json_decode($user, true);
-
-        return view('users.edit', compact('user'));
+        $userRepository->createOrUpdateKey($userRequest->validated());
+        return redirect()->route('users.index', ['page' => 1])->with('success', 'Данные пользователя сохранены');
     }
 
-    public function update(Request $request, $id)
+    public function destroy(int $userId)
     {
-        $user = $request->validate([
-            'name' => 'required',
-            'email' => 'required|email|unique:users,email,' . $id,
-            // Add validation for other fields
-        ]);
-
-        $user['id'] = $id; // Preserve the ID
-
-        Redis::hset('users', $id, json_encode($user));
-
-        return redirect()->route('users.index')->with('success', 'User updated successfully.');
-    }
-
-    public function destroy($id)
-    {
-        Redis::hdel('users', $id);
-
-        return redirect()->route('users.index')->with('success', 'User deleted successfully.');
+        Redis::del('user:' . $userId);
+        return redirect()->route('users.index', ['page' => 1])->with('success', __('Успешно удалено!'));
     }
 }
