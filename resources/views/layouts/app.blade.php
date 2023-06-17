@@ -10,6 +10,9 @@
     @vite('resources/js/notification.js')
 </head>
 <body>
+    <a href="/" class="absolute">
+        {{ __('Главная') }}
+    </a>
 
     @yield('content')
 
