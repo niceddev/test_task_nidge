@@ -256,3 +256,31 @@
 2023/06/16 15:21:26 [notice] 1#1: start worker process 37
 2023/06/16 15:21:26 [notice] 1#1: start worker process 38
 2023/06/16 15:21:26 [notice] 1#1: start worker process 39
+2023/06/17 05:53:00 [notice] 1#1: using the "epoll" event method
+2023/06/17 05:53:00 [notice] 1#1: nginx/1.25.1
+2023/06/17 05:53:00 [notice] 1#1: built by gcc 12.2.0 (Debian 12.2.0-14) 
+2023/06/17 05:53:00 [notice] 1#1: OS: Linux 5.10.16.3-microsoft-standard-WSL2
+2023/06/17 05:53:00 [notice] 1#1: getrlimit(RLIMIT_NOFILE): 1048576:1048576
+2023/06/17 05:53:00 [notice] 1#1: start worker processes
+2023/06/17 05:53:00 [notice] 1#1: start worker process 20
+2023/06/17 05:53:00 [notice] 1#1: start worker process 21
+2023/06/17 05:53:00 [notice] 1#1: start worker process 22
+2023/06/17 05:53:00 [notice] 1#1: start worker process 23
+2023/06/17 05:53:00 [notice] 1#1: start worker process 24
+2023/06/17 05:53:00 [notice] 1#1: start worker process 25
+2023/06/17 05:53:00 [notice] 1#1: start worker process 26
+2023/06/17 05:53:00 [notice] 1#1: start worker process 27
+2023/06/17 05:53:00 [notice] 1#1: start worker process 28
+2023/06/17 05:53:00 [notice] 1#1: start worker process 29
+2023/06/17 05:53:00 [notice] 1#1: start worker process 30
+2023/06/17 05:53:00 [notice] 1#1: start worker process 31
+2023/06/17 05:53:00 [notice] 1#1: start worker process 32
+2023/06/17 05:53:00 [notice] 1#1: start worker process 33
+2023/06/17 05:53:00 [notice] 1#1: start worker process 34
+2023/06/17 05:53:00 [notice] 1#1: start worker process 35
+2023/06/17 05:53:00 [notice] 1#1: start worker process 36
+2023/06/17 05:53:00 [notice] 1#1: start worker process 37
+2023/06/17 05:53:00 [notice] 1#1: start worker process 38
+2023/06/17 05:53:00 [notice] 1#1: start worker process 39
+2023/06/17 11:18:32 [warn] 20#20: *58 a client request body is buffered to a temporary file /var/cache/nginx/client_temp/0000000001, client: 172.18.0.1, server: _, request: "POST /users HTTP/1.1", host: "localhost:88", referrer: "http://localhost:88/users/create"
+2023/06/17 12:59:35 [warn] 22#22: *135 a client request body is buffered to a temporary file /var/cache/nginx/client_temp/0000000002, client: 172.18.0.1, server: _, request: "POST /users HTTP/1.1", host: "localhost:88", referrer: "http://localhost:88/users/create"
