@@ -1,17 +1,6 @@
-import Swal from 'sweetalert2'
+import Toastify from 'toastify-js'
 
 document.addEventListener('DOMContentLoaded', () => {
-
-    window.Toasts = Swal.mixin({
-        toast: true,
-        position: 'top-right',
-        showConfirmButton: false,
-        timer: 2000,
-        customClass: {
-            popup: 'colored-toast'
-        },
-        padding: 10,
-    })
 
     Pusher.logToConsole = true
 
@@ -21,10 +10,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let channel = pusher.subscribe('notification-channel')
     channel.bind('sent', function(data) {
-        Toasts.fire({
-            icon: 'success',
-            title: data
-        })
+        Toastify({
+            text: data,
+            duration: 3000,
+            newWindow: true,
+            close: false,
+            gravity: "top",
+            position: "right",
+            stopOnFocus: true,
+            style: {
+                background: "linear-gradient(135deg, #73a5ff, #5477f5)",
+            },
+        }).showToast();
     })
 
     sendNotification()
